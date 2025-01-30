@@ -3,7 +3,7 @@
  * A program to filter a list of keyboard switches from a properly-formatted .csv file
  * To use, place a .csv file of the switch chart in the same directory as this file and run. Output will be to terminal.
  * @author Jordan Rudman
- * @version 2.0
+ * @version 2.1
  */
 
 import java.io.*;
@@ -26,22 +26,47 @@ public class Switches {
     public static void main(String[] args) {
         try {
             Scanner input = new Scanner(System.in);
-            System.out.println("Enter desired minimum actuation force in g, or 0 for none");
-            actuForceMin = input.nextLine();
-            System.out.println("Enter desired maximum actuation force in g, or 999 for none");
-            actuForceMax = input.nextLine();
-            System.out.println("Enter desired minimum pre-travel in mm, or 0 for none");
-            preTravelMin = input.nextLine();
-            System.out.println("Enter desired maximum pre-travel in mm, or 999 for none");
-            preTravelMax = input.nextLine();
-            System.out.println("Enter desired minimum total travel in mm, or 0 for none");
-            totalTravelMin = input.nextLine();
-            System.out.println("Enter desired maximum total travel in mm, or 999 for none");
-            totalTravelMax = input.nextLine();
-            System.out.println("Enter desired switch feel (tactile, clicky, linear, or silent linear), or type \"none\"");
+            
+            // Actuation force
+            System.out.println("Enter desired minimum actuation force in g (or press Enter for no minimum):");
+            String actuForceMinInput = input.nextLine();
+            actuForceMin = actuForceMinInput.isEmpty() ? "0" : actuForceMinInput;
+
+            System.out.println("Enter desired maximum actuation force in g (or press Enter for no maximum):");
+            String actuForceMaxInput = input.nextLine();
+            actuForceMax = actuForceMaxInput.isEmpty() ? "999" : actuForceMaxInput;
+
+            // Pre-travel
+            System.out.println("Enter desired minimum pre-travel in mm (or press Enter for no minimum):");
+            String preTravelMinInput = input.nextLine();
+            preTravelMin = preTravelMinInput.isEmpty() ? "0" : preTravelMinInput;
+
+            System.out.println("Enter desired maximum pre-travel in mm (or press Enter for no maximum):");
+            String preTravelMaxInput = input.nextLine();
+            preTravelMax = preTravelMaxInput.isEmpty() ? "999" : preTravelMaxInput;
+
+            // Total travel
+            System.out.println("Enter desired minimum total travel in mm (or press Enter for no minimum):");
+            String totalTravelMinInput = input.nextLine();
+            totalTravelMin = totalTravelMinInput.isEmpty() ? "0" : totalTravelMinInput;
+
+            System.out.println("Enter desired maximum total travel in mm (or press Enter for no maximum):");
+            String totalTravelMaxInput = input.nextLine();
+            totalTravelMax = totalTravelMaxInput.isEmpty() ? "999" : totalTravelMaxInput;
+
+            // Feel
+            System.out.println("Enter desired switch feel (tactile, clicky, linear, silent tactile, silent linear, or press Enter for any):");
             feel = input.nextLine();
-            System.out.println("Enter desired mount type (plate, PCB), or type \"none\"");
+            if (feel.isEmpty()) {
+                feel = "none"; // Set to "none" if no preference
+            }
+
+            // Mount
+            System.out.println("Enter desired mount type (plate, PCB, or press Enter for any):");
             mount = input.nextLine();
+            if (mount.isEmpty()) {
+                mount = "none"; // Set to "none" if no preference
+            }
             input.close();
 
             List<String> list = new ArrayList<String>(); // the list to hold matching switches
@@ -77,16 +102,19 @@ public class Switches {
      * @return True if feel type matches, false otherwise
      */
     public static boolean feelCheck(String str) {
-        if(str.contains("/")) {
+        if(feel.equalsIgnoreCase("none")) {
+            return true;
+        }
+        if(str.equalsIgnoreCase(feel)){
+            return true;
+        }
+        else if(str.contains("/")) {
             String[] splitFeels = str.split("/");
             for(String aFeel : splitFeels) {
-                if(aFeel.equalsIgnoreCase(feel) || feel.equalsIgnoreCase("none")) {
+                if(aFeel.equalsIgnoreCase(feel)) {
                     return true;
                 }
             }
-        }
-        else if(str.equalsIgnoreCase(feel) || feel.equalsIgnoreCase("none")){
-            return true;
         }
         return false;
     }
@@ -144,16 +172,19 @@ public class Switches {
      * @return True if mount type matches, false otherwise
      */
     public static boolean mountCheck(String str) {
-        if(str.contains("/")) {
+        if(mount.equalsIgnoreCase("none")) {
+            return true;
+        }
+        if(str.equalsIgnoreCase(mount)){
+            return true;
+        }
+        else if(str.contains("/")) {
             String[] splitTypes = str.split("/");
             for(String aType : splitTypes) {
-                if(aType.equalsIgnoreCase(mount) || mount.equalsIgnoreCase("none")) {
-                    return true;
+                if(aType.equalsIgnoreCase(mount)) {
+                    
                 }
             }
-        }
-        else if(str.equalsIgnoreCase(mount) || mount.equalsIgnoreCase("none")){
-            return true;
         }
         return false;
     }

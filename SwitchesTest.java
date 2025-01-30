@@ -21,7 +21,26 @@ public class SwitchesTest {
         Switches.totalTravelMin = "3.5";
         Switches.totalTravelMax = "4.0";
         Switches.feel = "Tactile";
-        Switches.mount = "none";
+        Switches.mount = "Plate";
+    }
+
+    @Test
+    // Test feel (Tactile)
+    public void testFeelCheck() {
+        assertFalse(Switches.feelCheck("Clicky"));
+        assertTrue(Switches.feelCheck("Tactile"));
+        assertTrue(Switches.feelCheck("tactile"));
+        assertTrue(Switches.feelCheck("TACTILE"));
+        assertFalse(Switches.feelCheck("Tactle"));
+        assertFalse(Switches.feelCheck("Tactiles"));
+        assertTrue(Switches.feelCheck("Clicky/Tactile"));
+        assertTrue(Switches.feelCheck("Tactile/Linear"));
+        assertFalse(Switches.feelCheck("Clicky/Linear"));
+        assertFalse(Switches.feelCheck("Really Clicky"));
+        Switches.feel = "none";
+        assertTrue(Switches.feelCheck("none"));
+        assertTrue(Switches.feelCheck("Clicky"));
+        assertTrue(Switches.feelCheck("Tactile"));
     }
 
     @Test
@@ -41,16 +60,37 @@ public class SwitchesTest {
     }
 
     @Test
-    // Test feel
-    public void testFeelCheck() {
-        assertFalse(Switches.feelCheck("Clicky"));
-        //assertTrue(Switches.feelCheck("none"));
-        assertTrue(Switches.feelCheck("Tactile"));
-        assertTrue(Switches.feelCheck("tactile"));
-        assertTrue(Switches.feelCheck("TACTILE"));
-        assertFalse(Switches.feelCheck("Tactle"));
-        assertTrue(Switches.feelCheck("Clicky/Tactile"));
-        assertTrue(Switches.feelCheck("Tactile/Linear"));
-        assertFalse(Switches.feelCheck("Clicky/Linear"));
+    // Test pre-travel (2.0-2.5mm)
+    public void testPreTCheck() {
+        assertFalse(Switches.preTCheck("1.0mm"));
+        assertTrue(Switches.preTCheck("2.0mm"));
+        assertTrue(Switches.preTCheck("2.2mm"));
+        assertTrue(Switches.preTCheck("2.5mm"));
+        assertFalse(Switches.preTCheck("3.0mm"));
+    }
+
+    @Test
+    // Test total travel (3.5-4.0mm)
+    public void testTotalTCheck() {
+        assertFalse(Switches.totalTCheck("3.0mm"));
+        assertTrue(Switches.totalTCheck("3.5mm"));
+        assertTrue(Switches.totalTCheck("3.7mm"));
+        assertTrue(Switches.totalTCheck("4.0mm"));
+        assertFalse(Switches.totalTCheck("5.0mm"));
+    }
+
+    @Test
+    // Test mount (Plate)
+    public void testMountCheck() {
+        assertFalse(Switches.mountCheck("PCB"));
+        assertTrue(Switches.mountCheck("Plate"));
+        assertTrue(Switches.mountCheck("plate"));
+        assertTrue(Switches.mountCheck("PLATE"));
+        assertFalse(Switches.mountCheck("Plat"));
+        assertFalse(Switches.mountCheck("Plates"));
+        Switches.mount = "none";
+        assertTrue(Switches.mountCheck("none"));
+        assertTrue(Switches.mountCheck("PCB"));
+        assertTrue(Switches.mountCheck("Plate"));
     }
 }
