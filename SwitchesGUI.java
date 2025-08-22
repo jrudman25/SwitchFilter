@@ -96,8 +96,12 @@ public class SwitchesGUI extends JFrame {
             }
 
             List<String> list = new ArrayList<>();
-            File file = new File("./switchesformatted.csv");
-            Scanner sc = new Scanner(file);
+            InputStream input = SwitchesGUI.class.getResourceAsStream("/switchesformatted.csv");
+            if (input == null) {
+                throw new FileNotFoundException("switchesformatted.csv not found in JAR!");
+            }
+
+            Scanner sc = new Scanner(input);
             sc.nextLine(); // skip header
 
             while(sc.hasNextLine()) {
